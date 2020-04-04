@@ -63,13 +63,13 @@ public class TestPostOffice {
         Assert.assertFalse(po.addNewProduct(p3));
 
         //Assert
-        Assert.assertEquals(po.getMaxNumberOfProducts(), 5);
-        Assert.assertEquals(po.getNumberOfProducts(),2);
         List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 2);
             Assert.assertEquals(p.getPrice(), 2);
         }
+        Assert.assertEquals(po.getMaxNumberOfProducts(), 5);
+        Assert.assertEquals(po.getNumberOfProducts(),2);
     }
 
     /*
@@ -94,12 +94,12 @@ public class TestPostOffice {
 
         //Assert
         Assert.assertEquals(po.getMaxNumberOfProducts(), 13);
-        Assert.assertEquals(po.getNumberOfProducts(), 11);
         List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 3);
             Assert.assertEquals(p.getPrice(), 15);
         }
+        Assert.assertEquals(po.getNumberOfProducts(), 11);
     }
 
     /*
@@ -123,13 +123,13 @@ public class TestPostOffice {
         }
 
         //Assert
-        Assert.assertEquals(po.getMaxNumberOfProducts(), 14);
         Assert.assertEquals(po.getNumberOfProducts(), 12);
         List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 4);
             Assert.assertEquals(p.getPrice(), 25);
         }
+        Assert.assertEquals(po.getMaxNumberOfProducts(), 14);
     }
 
     /*
@@ -153,13 +153,13 @@ public class TestPostOffice {
         }
 
         //Assert
-        Assert.assertEquals(po.getMaxNumberOfProducts(), 2);
-        Assert.assertEquals(po.getNumberOfProducts(), 2);
         List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 5);
             Assert.assertEquals(p.getPrice(), 40);
         }
+        Assert.assertEquals(po.getNumberOfProducts(), 2);
+        Assert.assertEquals(po.getMaxNumberOfProducts(), 2);
     }
 
     /*
@@ -172,7 +172,7 @@ public class TestPostOffice {
      * fails
      * */
     @Test
-    public void testInavlidValueforMaxNumberOfProducts(){
+    public void testInvalidValueforMaxNumberOfProducts(){
         PostOffice po = new PostOffice(5, new ArrayList<Product>());
 
         //Adds products
