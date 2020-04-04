@@ -19,21 +19,20 @@ public class TestPostOffice {
     * */
     @Test
     public void testValidPostOffice(){
-        List<Product> products = new ArrayList<Product>();
+        PostOffice po = new PostOffice(4, new ArrayList<Product>());
 
+        //Adds products
         Product p1 = new Product("prod1","description1",1,1);
         p1.store(1);
         Product p2 = new Product("prod2","description2",1,1);
         p2.store(1);
-
-        products.add(p1);
-        products.add(p2);
-
-        PostOffice po = new PostOffice(4, products);
+        Assert.assertTrue(po.addNewProduct(p1));
+        Assert.assertTrue(po.addNewProduct(p2));
 
         //Assert
         Assert.assertEquals(po.getMaxNumberOfProducts(), 4);
         Assert.assertEquals(po.getNumberOfProducts(), 2);
+        List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 1);
             Assert.assertEquals(p.getPrice(), 1);
@@ -51,25 +50,26 @@ public class TestPostOffice {
      * */
     @Test
     public void testWhenProductNameIsNotUnique(){
-        List<Product> products = new ArrayList<Product>();
+        PostOffice po = new PostOffice(5, new ArrayList<Product>());
 
-        Product p1 = new Product("prod1","description1",2,1);
-        p1.store(2);
-        Product p2 = new Product("prod2","description2",2,1);
-        p2.store(2);
-
-        products.add(p1);
-        products.add(p2);
-
-        PostOffice po = new PostOffice(5, products);
-
+        //Adds products
+        for(int i = 1; i<=2; i++){
+            Product p = new Product("prod"+i,"description"+i,2,1);
+            p.store(2);
+            Assert.assertTrue(po.addNewProduct(p));
+        }
         Product p3 = new Product("prod1","description3",2,1);
         p3.store(2);
+        Assert.assertFalse(po.addNewProduct(p3));
 
         //Assert
-        Assert.assertFalse(po.addNewProduct(p3));
         Assert.assertEquals(po.getMaxNumberOfProducts(), 5);
         Assert.assertEquals(po.getNumberOfProducts(),2);
+        List<Product> products = po.getProducts();
+        for(Product p : products){
+            Assert.assertEquals(p.getCurrentQuantity(), 2);
+            Assert.assertEquals(p.getPrice(), 2);
+        }
     }
 
     /*
@@ -83,19 +83,19 @@ public class TestPostOffice {
      * */
     @Test
     public void testCase3(){
-        List<Product> products = new ArrayList<Product>();
+        PostOffice po = new PostOffice(13, new ArrayList<Product>());
 
+        //Adds products
         for(int i = 1; i<=11; i++){
             Product p = new Product("prod"+i,"description"+i,15,2);
             p.store(3);
-            products.add(p);
+            Assert.assertTrue(po.addNewProduct(p));
         }
-
-        PostOffice po = new PostOffice(13, products);
 
         //Assert
         Assert.assertEquals(po.getMaxNumberOfProducts(), 13);
         Assert.assertEquals(po.getNumberOfProducts(), 11);
+        List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 3);
             Assert.assertEquals(p.getPrice(), 15);
@@ -113,19 +113,19 @@ public class TestPostOffice {
      * */
     @Test
     public void testCase4(){
-        List<Product> products = new ArrayList<Product>();
+        PostOffice po = new PostOffice(14, new ArrayList<Product>());
 
+        //Adds products
         for(int i = 1; i<=12; i++){
             Product p = new Product("prod"+i,"description"+i,25,3);
             p.store(4);
-            products.add(p);
+            Assert.assertTrue(po.addNewProduct(p));
         }
-
-        PostOffice po = new PostOffice(14, products);
 
         //Assert
         Assert.assertEquals(po.getMaxNumberOfProducts(), 14);
         Assert.assertEquals(po.getNumberOfProducts(), 12);
+        List<Product> products = po.getProducts();
         for(Product p : products){
             Assert.assertEquals(p.getCurrentQuantity(), 4);
             Assert.assertEquals(p.getPrice(), 25);
@@ -135,26 +135,31 @@ public class TestPostOffice {
     /*
      * TC5
      * p.name -> is unique
-     * po.getNumberOfProducts()-> 4
+     * po.getNumberOfProducts()-> 2
      * po.maxNumberOfProducts -> 2
      * p.price -> 40
      * p.quantity -> 5
-     * fails
+     * accepted
      * */
     @Test
     public void testCase5(){
-        List<Product> products = new ArrayList<Product>();
+        PostOffice po = new PostOffice(2, new ArrayList<Product>());
 
-        for(int i = 1; i<=4; i++){
+        //Adds products
+        for(int i = 1; i<=2; i++){
             Product p = new Product("prod"+i,"description"+i,40,3);
             p.store(5);
-            products.add(p);
+            Assert.assertTrue(po.addNewProduct(p));
         }
-
-        PostOffice po = new PostOffice(2, products);
 
         //Assert
         Assert.assertEquals(po.getMaxNumberOfProducts(), 2);
+        Assert.assertEquals(po.getNumberOfProducts(), 2);
+        List<Product> products = po.getProducts();
+        for(Product p : products){
+            Assert.assertEquals(p.getCurrentQuantity(), 5);
+            Assert.assertEquals(p.getPrice(), 40);
+        }
     }
 
     /*
@@ -167,18 +172,25 @@ public class TestPostOffice {
      * fails
      * */
     @Test
-    public void testCase6(){
-        List<Product> products = new ArrayList<Product>();
+    public void testInavlidValueforMaxNumberOfProducts(){
+        PostOffice po = new PostOffice(5, new ArrayList<Product>());
 
+        //Adds products
         for(int i = 1; i<=5; i++){
             Product p = new Product("prod"+i,"description"+i,45,3);
             p.store(6);
-            products.add(p);
+            Assert.assertTrue(po.addNewProduct(p));
         }
-
-        PostOffice po = new PostOffice(1, products);
+        //Changes maxNumberOfProducts to invalid value
+        Assert.assertFalse(po.setMaxNumberOfProducts(1));
 
         //Assert
-        Assert.assertEquals(po.getMaxNumberOfProducts(), 1);
+        Assert.assertEquals(po.getMaxNumberOfProducts(), 5);
+        Assert.assertEquals(po.getNumberOfProducts(), 5);
+        List<Product> products = po.getProducts();
+        for(Product p : products){
+            Assert.assertEquals(p.getCurrentQuantity(), 6);
+            Assert.assertEquals(p.getPrice(), 45);
+        }
     }
 }
